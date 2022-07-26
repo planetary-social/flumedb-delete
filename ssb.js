@@ -2,7 +2,7 @@ const codec = require('flumecodec')
 const flume = require('flumedb')
 const log = require('flumelog-offset')
 const del = require('./delete')
-const deleteViews = require('./deleteViews')
+const deleteViews = require('./delete-views')
 const os = require('os')
 const path = require('path')
 
