@@ -2,7 +2,6 @@ const codec = require('flumecodec')
 const flume = require('flumedb')
 const log = require('flumelog-offset')
 const del = require('./delete')
-const deleteViews = require('./delete-views')
 const os = require('os')
 const path = require('path')
 
@@ -23,8 +22,5 @@ const compare = msg => {
 
 del({ dbPath, compare }, (err) => {
   if (err) throw err
-  console.log('done deleting from flume')
+  console.log('operation complete')
 })
-
-deleteViews(dbPath)
-console.log('complete')
