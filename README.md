@@ -24,7 +24,8 @@ To delete a feed, first select a valid ssb feed id. Make sure all scuttlebutt
 services are stoped, and run these two commands:
 
 ```
-node ssb.js --id='feedId'
+node ssb.js --id='feedId' --dir path/to/.ssb
+node delete-views --dir path/to/.ssb
 ```
 
 It can also help to private block a feed, so that it doesn't resync later: 
