@@ -2,8 +2,10 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const rimraf = require('rimraf')
+const yargs = require('yargs').argv
 
-const flumePath = path.join(os.homedir(), '.ssb', 'flume')
+const file = path.join(yargs.dir, '/flume/log.offset')
+const flumePath = path.join(yargs.dir, 'flume')
 
 fs.readdir(flumePath, (err, files) => {
   if (err) throw err

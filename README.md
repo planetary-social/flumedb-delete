@@ -1,34 +1,30 @@
 # flumedb-delete
 
-> current progress on deleting content from flumedb
+A tool to delete feeds from an SSB pub.
 
 The source code opens two instances of flumedb: `a` and `b`. Each of the
 messages are streamed with `a.stream()` and appended to be with `b.append()`
 as long as they pass the filter. The filter checks whether the message author
-is `"bob"`, and only appends messages that do *not* have that author.
+matches the given ID, and only appends messages that do *not* have that author.
+Finally, database a is overwritten with database b.
 
 If being used with Scuttlebutt, **this module does not delete blobs**.
 
 ## Install
 
 ```
-git@github.com:fraction/flumedb-delete.git
+git clone git@github.com:fraction/flumedb-delete.git
 cd flumedb-delete
+nvm use
 ```
 
 ## Usage
 
-This module includes a small demonstration in `index.js`.
-
-```
-npm start
-```
-
-To delete a feed, first select a valid ssb feed id, and run these two commands:
+To delete a feed, first select a valid ssb feed id. Make sure all scuttlebutt 
+services are stoped, and run these two commands:
 
 ```
 node ssb.js --id='feedId'
-node delete-views
 ```
 
 It can also help to private block a feed, so that it doesn't resync later: 
@@ -62,4 +58,4 @@ PRs accepted.
 
 ## License
 
-MIT © 2018 Fraction LLC
+MIT © 2022 Verse Communications, Inc.

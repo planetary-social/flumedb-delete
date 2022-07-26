@@ -15,6 +15,7 @@ const createDb = (file) => flume(log(file, { codec: codec.json }))
 // a is the original log
 // b is our secondary temporary log
 var b = createDb(paths.tmp)
+console.log('creating tmp db at:', paths.tmp)
 
 // define function to exclude content (e.g. check `msg.value.author`)
 const shouldDelete = msg => msg.author === 'bob'
@@ -22,7 +23,8 @@ const shouldDelete = msg => msg.author === 'bob'
 // once all of the non-deleted messages are added to the second db, we replace a with b
 
 module.exports = (obj, cb) => {
-  const { db, compare, file } = obj
+  const { dbPath, compare } = obj
+  a = createDb(dbPath)
 
   let fn
   if (typeof compare === 'function') {
@@ -34,7 +36,7 @@ module.exports = (obj, cb) => {
   // for each message, either ignore (delete) or add to new log
   const onEachMessage = msg => {
     if (fn(msg)) {
-      console.log('deleted:', msg)
+      console.log('deleted:', msg.key)
     } else {
       b.append(msg, function (err, seq) {
         if (err) throw err
@@ -44,7 +46,7 @@ module.exports = (obj, cb) => {
 
   const onDone = () => {
     // overwrite the real db with the temporary db
-    mv(paths.tmp, file || paths.db, function (err) {
+    mv(paths.tmp, dbPath, function (err) {
       if (err) return cb(err)
       console.log('done with delete')
       cb(null)
@@ -53,7 +55,7 @@ module.exports = (obj, cb) => {
 
   pull(
     // we start a pull stream, ignoring the sequence numbers
-    db.stream({ seqs: false }),
+    a.stream({ seqs: false }),
     // now we add the messages from the first db to the second db
     drain(onEachMessage, onDone)
   )
