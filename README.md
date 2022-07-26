@@ -10,6 +10,7 @@ Finally, database a is overwritten with database b.
 
 If being used with Scuttlebutt, **this module does not delete blobs**.
 
+
 ## Install
 
 ```
@@ -19,6 +20,8 @@ nvm use
 ```
 
 ## Usage
+
+**Always backup your db before running**
 
 To delete a feed, first select a valid ssb feed id. Make sure all scuttlebutt 
 services are stoped, and run these two commands:
@@ -34,20 +37,25 @@ It can also help to private block a feed, so that it doesn't resync later:
 scuttlebot publish --type contact --blocking --recps 'yourId' --contact 'feedId'
 ```
 
-If you'd like to delete a Scuttlebutt feed, you can experiment with `ssb.js`.
-Please keep in mind that this is **highly experimental** and you should only
-participate in this experiment if you're comfortable with losing your SSB 
-database.
+## Troubleshooting
 
-1. Turn off all Scuttlebutt services.
-2. Delete content from your log with `node ssb.js`.
-3. Delete your views with `node delete-views.js`
-4. Restart Scuttlebutt
-5. Wait for views to regenerate.
-6. Keep waiting...
-7. Done! You've deleted a feed from your database.
+Because this script rewrites the db it may change the permissions you had set on
+your flume directory. If this happens you may see an error like this:
 
-If you'd like to delete a different SSB feed, edit `ssb.js` manually.
+```
+node:internal/validators:97
+        throw new ERR_INVALID_ARG_TYPE(name, 'number', value);
+        ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "fd" argument must be of type number. Received undefined
+    at Object.close (node:fs:454:8)
+    at /home/node/node_modules/aligned-block-file/file.js:33:10
+    at FSReqCallback.oncomplete (node:fs:183:23) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+```
+
+In this case you need to chown .ssb/flume back to the user who is running ssb-server.
 
 ## Maintainers
 
